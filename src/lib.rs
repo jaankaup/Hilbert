@@ -73,4 +73,29 @@ pub mod hilbert {
         }
         binary_str
     }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        #[test]
+        fn pah() {
+            assert_eq!(gc(0),  0);
+            assert_eq!(gc(1),  1);
+            assert_eq!(gc(2),  3);
+            assert_eq!(gc(3),  2);
+            assert_eq!(gc(4),  6);
+            assert_eq!(gc(5),  7);
+            assert_eq!(gc(6),  5);
+            assert_eq!(gc(7),  4);
+            assert_eq!(gc(8),  12);
+            assert_eq!(gc(9),  13);
+            assert_eq!(gc(10), 15);
+            assert_eq!(gc(11), 14);
+            assert_eq!(gc(12), 10);
+            assert_eq!(gc(13), 11);
+            assert_eq!(gc(14), 9);
+            assert_eq!(gc(15), 8);
+        }
+    }
 }
+
