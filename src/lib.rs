@@ -29,15 +29,14 @@ pub mod hilbert {
         (n & (1 << i)) >> i
     }
     
-    /// The bit of the Gray Code is going to change when we proceed to next index.
-    /// Dimension of change in the Gray Code.
-    pub fn tsb(i: u32) -> u32 {
-        (gc(i) ^ gc(i+1)) - 1 
+    pub fn g(i: u32) -> u32 {
+        let temp = (gc(i) ^ gc(i+1)); 
+        32 - temp.leading_zeros() - 1
     }
     
     /// Give the Gray Code for the entry i + 1
     pub fn next_entry(i: u32) -> u32 {
-        i ^ (1 << tsb(i))
+        i ^ (1 << g(i))
     }
     
     /// Calculate entry Gray Code for given index.
@@ -50,12 +49,17 @@ pub mod hilbert {
     
     /// Intra sub-hypercube direction.
     pub fn d(i: u32, n: u32) -> u32 {
-        if i == 0 { 0 }
-        else if i & 1 == 0 { // is event
-            tsb(i-1).modulo(n)
+        if i == 0 { println!("zero"); 0 }
+        else if i & 1 == 0 { // is even
+            println!("even");
+            println!("g({}-1).modulo{} == {}", i, n, g(i-1) % n); 
+            //g(i-1).modulo(n)
+            g(i-1) % n
         }
         else if i & 1 == 1 { // is odd
-            tsb(i).modulo(n)
+            println!("odd");
+            println!("g({}) % {} == {} % {} == {}", i, n, g(i), n, g(i) % n); 
+            g(i) % n
         }
         else {
             panic!("A serious bug!"); // TODO: remove this.
@@ -73,6 +77,7 @@ pub mod hilbert {
         }
         binary_str
     }
+
 
     #[cfg(test)]
     mod tests {
