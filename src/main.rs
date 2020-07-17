@@ -37,7 +37,7 @@ fn main() {
     println!("entry({}) == {}", 3, entry(3));
     println!("");
 
-    println!("The intra sub-hypercube direction d(i). TODO: this gives wrong result at index 3.");
+    println!("The intra sub-hypercube direction d(i).");
     println!("d({},{}) == {}", 0,2, d(0,2));
     println!("d({},{}) == {}", 1,2, d(1,2));
     println!("d({},{}) == {}", 2,2, d(2,2));
