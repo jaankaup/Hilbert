@@ -21,12 +21,11 @@ fn gc_inverse(g: u32) -> u32 {
 }
 
 /// Get the i:th bit from given number.
-fn get_bit(number:u32, i: u32) -> u32 {
+fn get_bit(n:u32, i: u32) -> u32 {
 
     assert_eq!(i < 32, true);
-    
-    if (number & (1 << i)) == 0 { 0 }
-    else { 1 } 
+
+    (n & (1 << i)) >> i
 }
 
 /// Convert number to binary representation. Bit range is the number of bits used to the
@@ -118,4 +117,8 @@ fn main() {
     println!("entry({}) == {}", 1, entry(1));
     println!("entry({}) == {}", 2, entry(2));
     println!("entry({}) == {}", 3, entry(3));
+
+    for i in 0..32 {
+        println!("bit({},{}) == {}", 7, i, get_bit(7, i));
+    }
 }
