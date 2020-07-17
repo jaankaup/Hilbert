@@ -77,8 +77,9 @@ pub mod hilbert {
     #[cfg(test)]
     mod tests {
         use super::*;
+
         #[test]
-        fn pah() {
+        fn gray_codes() {
             assert_eq!(gc(0),  0);
             assert_eq!(gc(1),  1);
             assert_eq!(gc(2),  3);
@@ -95,6 +96,26 @@ pub mod hilbert {
             assert_eq!(gc(13), 11);
             assert_eq!(gc(14), 9);
             assert_eq!(gc(15), 8);
+        }
+
+        #[test]
+        fn gray_inverse_codes() {
+            assert_eq!(gc_inverse(0),   0);
+            assert_eq!(gc_inverse(1),   1);
+            assert_eq!(gc_inverse(2),   3);
+            assert_eq!(gc_inverse(3),   2);
+            assert_eq!(gc_inverse(4),   7);
+            assert_eq!(gc_inverse(5),   6);
+            assert_eq!(gc_inverse(6),   4);
+            assert_eq!(gc_inverse(7),   5);
+            assert_eq!(gc_inverse(8),  15);
+            assert_eq!(gc_inverse(9),  14);
+            assert_eq!(gc_inverse(10), 12);
+            assert_eq!(gc_inverse(11), 13);
+            assert_eq!(gc_inverse(12),  8);
+            assert_eq!(gc_inverse(13),  9);
+            assert_eq!(gc_inverse(14), 11);
+            assert_eq!(gc_inverse(15), 10);
         }
     }
 }

@@ -44,8 +44,4 @@ fn main() {
     println!("entry({}) == {}", 1, entry(1));
     println!("entry({}) == {}", 2, entry(2));
     println!("entry({}) == {}", 3, entry(3));
-
-    for i in 0..32 {
-        println!("bit({},{}) == {}", 7, i, get_bit(7, i));
-    }
 }
