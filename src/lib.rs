@@ -102,30 +102,18 @@ pub mod hilbert {
         println!("p.0 == {}", bit_to_string(p.0, 32));
         println!("p.1 == {}", bit_to_string(p.1, 32));
         println!("");
-        let (mut h, mut e, mut dd) = (0,0,0);
+        let (mut h, mut e, mut dd) = (0,0,1);
         let mut i = m-1;
         //while i >= 0 {
         println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}","i","l","Ted(l)","w","e(w)","d(w)","e","d","h", width=7);
         println!("-----------------------------------------------------------------------------------------------------------------------");
         for i in (0..m).rev() {
             let mut l = 0 | (bit(p.1, i) << 1) | bit(p.0, i);  
-            //println!("l == {}", bit_to_string(l, 32));
             let tl = transform(e, dd, l);
-            //println!("l = transform({}, {}, {}) == {}", e, dd, l, bit_to_string(transform(e, dd, l), 32));
             let w = gc_inverse(tl);
-            //println!("w == {}", bit_to_string(w, 32));
             e = e ^ lbr(entry(w), 2, dd+1); 
-            //println!("e = {} ^ lbr(entry({}), 2, {}+1) == {}", e, w, dd, bit_to_string(e ^ lbr(entry(w), 2, dd+1), 32));
-            let old_dd = dd;
-            //dd = dd + d(w,2) + 1 % n;
-            dd = (old_dd + d(w,2) + 1) % n; // TODO: fix
-            //println!("d(w) == {}", d(w,2));
-            //println!("dd = {} + d({},2) :: {} + 1 % {} == {}", old_dd, w, d(w,2), n, bit_to_string((old_dd + d(w,2) + 1) % n, 32));
+            dd = (dd + d(w,2) + 1) % n;
             h = (h << n) | w;
-            //println!("h = ({} << {}) | {} == {}", h, n, w, (h << n) | w);
-            //println!("--------------------");
-            //i = i - 1;
-
             println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}",i,l,tl,w,entry(w),d(w,2),e,dd,h, width=7);
         }
         h
