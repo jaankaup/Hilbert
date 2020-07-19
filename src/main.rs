@@ -44,4 +44,13 @@ fn main() {
     println!("d({},{}) == {}", 3,2, d(3,2));
     println!("");
 
+    //println!("rbr({}, {}, {}) == {}", 3,4,0, bit_to_string(rbr(3,4,0), 32));
+
+    let n = 2;
+    let m = 3;
+    let p = (5,6);
+    println!("hilbert_index({}, {}, ({},{})) == {}", n,m,p.0, p.1, hilbert_index(n, m, p));
+
+    // println!("lbr({}, {}, {}) == {}", 3,4,0, bit_to_string(lbr(3,4,0), 32));
+    // println!("lbr({}, {}, {}) == {}", 3,4,1, bit_to_string(lbr(3,4,1), 32));
 }
