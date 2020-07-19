@@ -4,14 +4,4 @@ version = "0.1.0"
 authors = ["jaankaup <janne.a.kauppinen@student.jyu.fi>"]
 edition = "2018"
 
-#[lib]
-#name = "hilbert"
-#path = "src/hilbert.rs"
-
-#[[bin]]
-#name = "hilbert_bin"
-#path = "src/main.rs"
-
 [dependencies]
-pad = "0.1.6"
-modulo = "0.1.2"

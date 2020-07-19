@@ -1,6 +1,5 @@
 pub mod hilbert {
 
-    // use modulo::Mod;
     use std::char;
 
     /// Calculate the binary reflected Gray Code for index i.
@@ -12,7 +11,7 @@ pub mod hilbert {
     pub fn gc_inverse(g: u32) -> u32 {
     
         //let m = 32 - g.leading_zeros() - 1;
-        let m = (g as f64 + 1.0).log2().ceil() as u32;
+        let m = (g as f64 + 1.0).log2().ceil() as u32; // A better way?
     
         let (mut i,mut j) = (g, 1);
         while j < m {
@@ -61,8 +60,6 @@ pub mod hilbert {
         if i == 0 { 0 }
         else if i & 1 == 0 { g(i-1) % n }
         else { g(i) % n }
-        // else if i & 1 == 0 { g(i-1) % n }
-        // else { g(i) % n }
     }
 
     /// The right bit rotation. Rotates number b to the right i times in bit range n.
@@ -70,11 +67,10 @@ pub mod hilbert {
         // let upper_index = n - 1 + (i % n);
         // let lower_index = i % n;
         let mut temp = b;
-        for c in 0..i {
+        for _c in 0..i {
             let lsb = bit(temp,0); 
-            let mut rotated = temp >> 1;
+            let rotated = temp >> 1;
             temp = put_bit(rotated, n-1, lsb);
-            //println!("temp. Rotated by {} == {}", c, bit_to_string(temp, 32));
         }
         temp
     }
@@ -85,38 +81,57 @@ pub mod hilbert {
         // let lower_index = i % n;
         let mut temp = b;
         let mask = (1 << n) - 1;
-        for c in 0..i {
+        for _c in 0..i {
             let msb = bit(temp,n-1); 
-            let mut rotated = temp << 1 & mask;
+            let rotated = temp << 1 & mask;
             temp = put_bit(rotated, 0, msb);
         }
         temp
     }
 
-    /// The right bit rotation.
+    /// Transform for the given entry e and intra direction d. b is the i:th 
     pub fn transform(e: u32, d: u32, b: u32) -> u32 {
         rbr(b ^ e, 2, d+1) 
     }
+
+    pub fn inverse_transform(e: u32, d: u32, b: u32) -> u32 {
+        transform(rbr(e, 2, d+1), 2-d-1, b)
+    }
     
-    pub fn hilbert_index(n: u32, m: u32, p: (u32, u32)) -> u32 {
-        println!("p.0 == {}", bit_to_string(p.0, 32));
-        println!("p.1 == {}", bit_to_string(p.1, 32));
-        println!("");
+    /// Create Hilbert index for 2d point. n is the dimension. m is the bit size for a single point
+    /// bit representation.
+    pub fn hilbert_index(n: u32, m: u32, p: [u32; 2]) -> u32 {
         let (mut h, mut e, mut dd) = (0,0,1);
-        let mut i = m-1;
-        //while i >= 0 {
-        println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}","i","l","Ted(l)","w","e(w)","d(w)","e","d","h", width=7);
-        println!("-----------------------------------------------------------------------------------------------------------------------");
+        //println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}","i","l","Ted(l)","w","e(w)","d(w)","e","d","h", width=7);
+        //println!("-----------------------------------------------------------------------------------------------------------------------");
         for i in (0..m).rev() {
-            let mut l = 0 | (bit(p.1, i) << 1) | bit(p.0, i);  
+            let l = 0 | (bit(p[1], i) << 1) | bit(p[0], i);  
             let tl = transform(e, dd, l);
             let w = gc_inverse(tl);
             e = e ^ lbr(entry(w), 2, dd+1); 
             dd = (dd + d(w,2) + 1) % n;
             h = (h << n) | w;
-            println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}",i,l,tl,w,entry(w),d(w,2),e,dd,h, width=7);
+            //println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}",i,l,tl,w,entry(w),d(w,2),e,dd,h, width=7);
         }
         h
+    }
+
+    /// Get the 2d-point from an Hilbert index. n is the dimension. m is the bit size for a single point
+    /// bit representation. h is the hilbert index.
+    pub fn hilbert_index_reverse(n: u32, m: u32, h: u32) -> [u32; 2] {
+        let (mut e, mut dd) = (0,0);
+        let mut p = [0,0];
+        for i in (0..m).rev() {
+            let w = 0 | (bit(h, i*n + n -1) << 1) | bit(h, i*n);
+            let mut l = gc(w);
+            l = inverse_transform(e,dd,l);
+            for j in 0..n {
+                p[j as usize] = put_bit(p[j as usize], i, bit(l,j));    
+            }
+            e = e ^ lbr(entry(w), 2, dd+1);
+            dd = (dd + d(w, 2) + 1) % n
+        }
+        p
     }
 
     /// Convert number to binary representation. Bit range is the number of bits used to the

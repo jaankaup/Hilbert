@@ -48,8 +48,10 @@ fn main() {
 
     let n = 2;
     let m = 3;
-    let p = (5,6);
-    println!("hilbert_index({}, {}, ({},{})) == {}", n,m,p.0, p.1, hilbert_index(n, m, p));
+    let p = [5,6];
+    println!("hilbert_index({}, {}, [{},{}]) == {}", n,m,p[0], p[1], hilbert_index(n, m, p));
+    let inverse = hilbert_index_reverse(n, m, 45);
+    println!("inverse :: [{}, {}]", inverse[0], inverse[1]); 
 
     // println!("lbr({}, {}, {}) == {}", 3,4,0, bit_to_string(lbr(3,4,0), 32));
     // println!("lbr({}, {}, {}) == {}", 3,4,1, bit_to_string(lbr(3,4,1), 32));
