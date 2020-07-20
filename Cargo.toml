@@ -5,6 +5,6 @@ authors = ["jaankaup <janne.a.kauppinen@student.jyu.fi>"]
 edition = "2018"
 
 [lib]
-name = "hilbert"
+name = "jaankaup_hilbert"
 
 [dependencies]
