@@ -52,7 +52,7 @@ fn main() {
     let p_3d = [5,6,7];
     println!("hilbert_index({}, {}, [{},{},{}]) == {}", n,m,p_3d[0], p_3d[1], p_3d[2], hilbert_index(n, m, p_3d));
 
-    let inverse = hilbert_index_reverse(n, m, 55);
+    let inverse = hilbert_index_reverse(n, m, 6);
     //println!("hilbert_index({}, {}, [{},{}]) == {}", n,m,p[0], p[1], hilbert_index(n, m, p));
     //for i in 0..64 {
     //    let inverse = hilbert_index_reverse(n, m, i);

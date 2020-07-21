@@ -91,11 +91,11 @@ pub mod hilbert {
 
     /// Transform for the given entry e and intra direction d. b is the i:th 
     pub fn transform(e: u32, d: u32, b: u32) -> u32 {
-        rbr(b ^ e, 2, d+1) 
+        rbr(b ^ e, 3, d+1) 
     }
 
     pub fn inverse_transform(e: u32, d: u32, b: u32) -> u32 {
-        transform(rbr(e, 2, d+1), 2-d-1, b)
+        transform(rbr(e, 3, d+1), 3-d-1, b)
     }
     
 //    /// Create Hilbert index for 2d point. n is the dimension. m is the bit size for a single point
