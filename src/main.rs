@@ -1,4 +1,4 @@
-use hilbert_project::hilbert::*;
+use jaankaup_hilbert::hilbert::*;
 
 fn main() {
 
@@ -46,10 +46,14 @@ fn main() {
 
     //println!("rbr({}, {}, {}) == {}", 3,4,0, bit_to_string(rbr(3,4,0), 32));
 
-    let n = 2;
+    let n = 3;
     let m = 3;
     let p = [5,6];
-    println!("hilbert_index({}, {}, [{},{}]) == {}", n,m,p[0], p[1], hilbert_index(n, m, p));
+    let p_3d = [5,6,7];
+    println!("hilbert_index({}, {}, [{},{},{}]) == {}", n,m,p_3d[0], p_3d[1], p_3d[2], hilbert_index(n, m, p_3d));
+
+    let inverse = hilbert_index_reverse(n, m, 55);
+    //println!("hilbert_index({}, {}, [{},{}]) == {}", n,m,p[0], p[1], hilbert_index(n, m, p));
     //for i in 0..64 {
     //    let inverse = hilbert_index_reverse(n, m, i);
     //    println!("inverse {} :: [{}, {}]",i, inverse[0], inverse[1]); 

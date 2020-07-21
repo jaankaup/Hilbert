@@ -98,18 +98,36 @@ pub mod hilbert {
         transform(rbr(e, 2, d+1), 2-d-1, b)
     }
     
-    /// Create Hilbert index for 2d point. n is the dimension. m is the bit size for a single point
+//    /// Create Hilbert index for 2d point. n is the dimension. m is the bit size for a single point
+//    /// bit representation.
+//    pub fn hilbert_index(n: u32, m: u32, p: [u32; 2]) -> u32 {
+//        let (mut h, mut e, mut dd) = (0,0,1);
+//        //println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}","i","l","Ted(l)","w","e(w)","d(w)","e","d","h", width=7);
+//        //println!("-----------------------------------------------------------------------------------------------------------------------");
+//        for i in (0..m).rev() {
+//            let l = 0 | (bit(p[1], i) << 1) | bit(p[0], i);  
+//            let tl = transform(e, dd, l);
+//            let w = gc_inverse(tl);
+//            e = e ^ lbr(entry(w), 2, dd+1); 
+//            dd = (dd + d(w,2) + 1) % n;
+//            h = (h << n) | w;
+//            //println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}",i,l,tl,w,entry(w),d(w,2),e,dd,h, width=7);
+//        }
+//        h
+//    }
+
+    /// Create Hilbert index for 3d point. n is the dimension. m is the bit size for a single point
     /// bit representation.
-    pub fn hilbert_index(n: u32, m: u32, p: [u32; 2]) -> u32 {
+    pub fn hilbert_index(n: u32, m: u32, p: [u32; 3]) -> u32 {
         let (mut h, mut e, mut dd) = (0,0,1);
         //println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}","i","l","Ted(l)","w","e(w)","d(w)","e","d","h", width=7);
         //println!("-----------------------------------------------------------------------------------------------------------------------");
         for i in (0..m).rev() {
-            let l = 0 | (bit(p[1], i) << 1) | bit(p[0], i);  
+            let l = 0 | (bit(p[2], i) << 2) | (bit(p[1], i) << 1) | bit(p[0], i);  
             let tl = transform(e, dd, l);
             let w = gc_inverse(tl);
-            e = e ^ lbr(entry(w), 2, dd+1); 
-            dd = (dd + d(w,2) + 1) % n;
+            e = e ^ lbr(entry(w), 3, dd+1); 
+            dd = (dd + d(w,3) + 1) % n;
             h = (h << n) | w;
             //println!("{:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$} {:<width$}",i,l,tl,w,entry(w),d(w,2),e,dd,h, width=7);
         }
@@ -118,18 +136,18 @@ pub mod hilbert {
 
     /// Get the 2d-point from an Hilbert index. n is the dimension. m is the bit size for a single point
     /// bit representation. h is the hilbert index.
-    pub fn hilbert_index_reverse(n: u32, m: u32, h: u32) -> [u32; 2] {
+    pub fn hilbert_index_reverse(n: u32, m: u32, h: u32) -> [u32; 3] {
         let (mut e, mut dd) = (0,0);
-        let mut p = [0,0];
+        let mut p = [0,0,0];
         for i in (0..m).rev() {
-            let w = 0 | (bit(h, i*n + n -1) << 1) | bit(h, i*n);
+            let w = 0 | (bit(h, i*n + n - 2) << 2) | (bit(h, i*n + n - 1) << 1) | bit(h, i*n);
             let mut l = gc(w);
             l = inverse_transform(e,dd,l);
             for j in 0..n {
                 p[j as usize] = put_bit(p[j as usize], i, bit(l,j));    
             }
-            e = e ^ lbr(entry(w), 2, dd+1);
-            dd = (dd + d(w, 2) + 1) % n
+            e = e ^ lbr(entry(w), 3, dd+1);
+            dd = (dd + d(w, 3) + 1) % n
         }
         p
     }
